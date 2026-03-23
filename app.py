@@ -95,15 +95,9 @@ with col_left:
                 {'range': [75, 100], 'color': "#dcfce7"}],
             'threshold': {'line': {'color': "black", 'width': 4}, 'value': verimlilik}
         },
-        title = {'text': "Mağaza Verimlilik Endeksi", 'font': {'size': 20, 'color': 'black'}}
+        title = {'text': "Mağaza Verimlilik Endeksi", 'font': {'size': 20, 'color': 'white'}}
     ))
-    # Grafik Başlığını Beyaz, Arka Planı Şeffaf Yapma
-    fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)', 
-        plot_bgcolor='rgba(0,0,0,0)', 
-        height=400,
-        font={'color': "white"} # Grafik içindeki tüm yazıların rengini beyaz yapar
-    )
+    fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=400)
     st.plotly_chart(fig, use_container_width=True)
 
 with col_right:
