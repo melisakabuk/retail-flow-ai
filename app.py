@@ -128,4 +128,4 @@ st.line_chart(trend)
 
 # 11. FOOTER
 st.markdown("---")
-st.caption(f"RetailFlow x Decathlon | {kategori} Analizi | Melisa Kabuk | UpSchool Future Talent")
+st.caption(f"RetailFlow x Decathlon Analizi | Melisa Kabuk | UpSchool Future Talent")
