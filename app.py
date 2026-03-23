@@ -101,7 +101,7 @@ with col_left:
                 {'range': [40, 75], 'color': "#fef3c7"},
                 {'range': [75, 100], 'color': "#dcfce7"}]
         },
-        title = {'text': "Mağaza Verimlilik Endeksi", 'font': {'size': 20, 'color': '#1f2937'}}
+        title = {'text': "Mağaza Verimlilik Endeksi", 'font': {'size': 20, 'color': 'white'}}
     ))
     fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', height=400)
     st.plotly_chart(fig, use_container_width=True)
