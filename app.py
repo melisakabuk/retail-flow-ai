@@ -40,6 +40,10 @@ st.markdown("""
         color: #1f2937 !important;
         font-weight: 600 !important;
     }
+    /* Sidebar'daki Selectbox (Kategori) etiketini beyaz yapar */
+    [data-testid="stWidgetLabel"] p {
+        color: white !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
