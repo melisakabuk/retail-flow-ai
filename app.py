@@ -1,39 +1,46 @@
 import streamlit as st
 import plotly.graph_objects as go
 
-# 1. SAYFA YAPILANDIRMASI (Profesyonel Görünüm)
+# 1. SAYFA YAPILANDIRMASI
 st.set_page_config(page_title="RetailFlow x Decathlon | Business Analytics", layout="wide")
 
-# 2. CSS - TAM SİYAH METİNLER VE DECATHLON MAVİSİ (Okunabilirlik Sorunu Çözüldü)
+# 2. CSS - SADECE KUTU BOYUTLARI VE SİYAH METİN DÜZELTMESİ
 st.markdown("""
     <style>
     .main { background-color: #f4f7f6; }
     
-    /* Beyaz Metrik Kutularının Tasarımı */
+    /* Beyaz Metrik Kutularının Tasarımı ve Boyut Sabitleme */
     div[data-testid="stMetric"] {
         background-color: white !important;
         padding: 20px !important;
         border-radius: 12px !important;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
         border-top: 6px solid #0082C3 !important; /* Decathlon Mavisi */
+        min-height: 160px !important; /* Tüm kutuları aynı boyuta sabitler */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
-    /* Rakamlar (Örn: 23 dk) - TAM SİYAH VE NET */
+    /* Rakamlar - TAM SİYAH VE NET */
     [data-testid="stMetricValue"] {
         color: #000000 !important;
         font-size: 32px !important;
         font-weight: 700 !important;
     }
 
-    /* Başlıklar (Örn: Tahmini İade Süresi) - TAM SİYAH VE NET */
+    /* Başlıklar - TAM SİYAH VE NET */
     [data-testid="stMetricLabel"] {
         color: #000000 !important;
         font-size: 16px !important;
         font-weight: 600 !important;
     }
 
-    /* Yan Menü (Sidebar) Yazı Rengi */
-    .css-1d391kg { color: #000000; }
+    /* Sidebar Yazılarını Belirginleştirme */
+    .stSlider label, .stSelectbox label, .stWidget label {
+        color: #000000 !important;
+        font-weight: 600 !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -42,7 +49,7 @@ st.title("🔵 RetailFlow AI: Decathlon Operasyonel Karar Destek Sistemi")
 st.markdown("**İş Analizi Portfolyo Projesi** | RFID ve Kuyruk Teorisi Entegrasyonu")
 st.info("Bu prototip, Decathlon mağaza içi iade süreçlerindeki darboğazları gerçek zamanlı verilerle optimize etmek için tasarlanmıştır.")
 
-# 4. SIDEBAR: DECATHLON PARAMETRELERİ (Stratejik Giriş)
+# 4. SIDEBAR: PARAMETRELER
 with st.sidebar:
     st.header("🏬 Mağaza Canlı Verileri")
     st.markdown("---")
@@ -57,13 +64,12 @@ with st.sidebar:
     rfid_active = st.toggle("RFID Otomatik Sayım Sistemi", value=True)
     st.caption("💡 Bu veriler mağaza içi sensörlerden ve RFID gate sistemlerinden anlık beslenmektedir.")
 
-# 5. BUSINESS LOGIC (Decathlon Case-Specific Analiz)
-# Decathlon'da Outdoor ürünleri (çadır vb.) kontrolü daha karmaşıktır.
+# 5. BUSINESS LOGIC
 katsayi = 2.1 if kategori == "Outdoor & Kamp" else 1.3
 bekleme_suresi = (iade_kuyrugu * katsayi) / (personel * 0.5)
 verimlilik = min(100, int((personel * 18) / (musteri + iade_kuyrugu + 1) * 100))
 
-# 6. ÜST METRİKLER (KPIs)
+# 6. ÜST METRİKLER (Artık hepsi aynı boyutta ve simsiyah)
 m1, m2, m3, m4 = st.columns(4)
 m1.metric("Tahmini İade Süresi", f"{int(bekleme_suresi)} dk", delta="Kritik" if bekleme_suresi > 20 else "Normal")
 m2.metric("Sistem Sağlığı", f"%{verimlilik}")
@@ -76,7 +82,6 @@ st.markdown("---")
 col_left, col_right = st.columns([1.5, 1])
 
 with col_left:
-    # Profesyonel Gauge Chart (Decathlon Mavisi)
     fig = go.Figure(go.Indicator(
         mode = "gauge+number",
         value = verimlilik,
@@ -104,11 +109,10 @@ with col_right:
     elif 40 <= verimlilik < 75:
         st.warning("**DİKKAT:** Yoğunluk artış trendinde. Personel rotasyonunu beklemeye alın.")
     else:
-        st.success("**DURUM OPTİMAL:** Kaynak dağılımı verimli. Müşteri memnuniyeti (NPS) odaklı ilerlenebilir.")
+        st.success("**DURUM OPTİMAL:** Kaynak dağılımı verimli.")
 
-    # "What-If" Analizi (İş Analisti Dokunuşu)
     st.markdown("---")
-    st.write(f"🔍 **Stratejik Öngörü:** Personel sayısını 1 kişi artırmak, {kategori} iade hızını **%22 oranında** optimize edecektir.")
+    st.write(f"🔍 **Stratejik Öngörü:** Personel sayısını 1 kişi artırmak hızı **%22** iyileştirir.")
 
 # 8. ALT BİLGİ
 st.markdown("---")
