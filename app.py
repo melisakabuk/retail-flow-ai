@@ -10,7 +10,7 @@ st.markdown("""
     .main { background-color: #f8f9fa; }
     .stMetric { border-left: 5px solid #007bff; background: white; padding: 10px; border-radius: 5px; }
     </style>
-    """, unsafe_allow_index=True)
+    """, unsafe_allow_html=True)
 
 st.title("📊 RetailFlow AI: Akıllı Mağaza Yönetimi")
 st.info("Bu prototip, İş Analizi prensipleriyle iade ve kasa süreçlerini optimize etmek için tasarlanmıştır.")
