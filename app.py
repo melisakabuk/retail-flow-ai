@@ -56,19 +56,24 @@ st.info("Bu sistem, mağaza içi iade süreçlerini gerçek zamanlı verilerle o
 with st.sidebar:
     st.header("🏬 Mağaza Canlı Verileri")
     st.markdown("---")
+    
     kategori = st.selectbox("Odak Spor Kategorisi", 
                             ["Outdoor & Kamp", "Fitness & Yoga", "Su Sporları", "Takım Sporları"])
     
-    # Küçük bir creative dokunuş: Simülasyon butonu
+    # 🔄 Verileri Rastgele Güncelleme Mantığı
     if st.button("🔄 Verileri Rastgele Güncelle"):
         musteri_val = random.randint(50, 350)
         iade_val = random.randint(5, 60)
+        personel_val = random.randint(5, 25) # Rastgele personel eklendi
     else:
+        # Butona basılmadığında duracak varsayılan değerler
         musteri_val = 165
         iade_val = 35
+        personel_val = 12
 
+    # Slider'lar artık yukarıdaki değişkenlerden besleniyor
     musteri = st.slider("Mağazadaki Toplam Müşteri", 0, 400, musteri_val)
-    personel = st.slider("Aktif Takım Arkadaşı (Staff)", 1, 30, 12)
+    personel = st.slider("Aktif Takım Arkadaşı (Staff)", 1, 30, personel_val)
     iade_kuyrugu = st.slider("Bekleyen İade/Değişim (Kişi)", 0, 100, iade_val)
     
     st.markdown("---")
