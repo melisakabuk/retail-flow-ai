@@ -7,10 +7,38 @@ st.set_page_config(page_title="RetailFlow Pro | Business Analytics", layout="wid
 # CSS - Profesyonel UI Dokunuşları
 st.markdown("""
     <style>
+    /* Arka plan rengi */
     .main { background-color: #f4f7f6; }
-    [data-testid="stMetricValue"] { font-size: 28px; color: #1e3a8a; }
-    .stMetric { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-top: 4px solid #3b82f6; }
-    div.stButton > button { background-color: #3b82f6; color: white; border-radius: 8px; }
+    
+    /* Beyaz Kutuların Tasarımı */
+    div[data-testid="stMetric"] {
+        background-color: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border-top: 5px solid #1e3a8a; /* Üstte lacivert çizgi */
+    }
+
+    /* Rakamlar (Örn: 23 dk) - TAM SİYAH */
+    [data-testid="stMetricValue"] {
+        color: #000000 !important;
+        font-size: 32px !important;
+        font-weight: 700 !important;
+    }
+
+    /* Başlıklar (Örn: Tahmini Bekleme) - TAM SİYAH */
+    [data-testid="stMetricLabel"] {
+        color: #000000 !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+    }
+
+    /* Buton Tasarımı */
+    div.stButton > button {
+        background-color: #1e3a8a;
+        color: white;
+        border-radius: 8px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -81,4 +109,4 @@ with col_right:
 
 # ALT BİLGİ
 st.markdown("---")
-st.caption("RetailFlow Pro v2.0 | Melis | UpSchool & YGA İş Analitiği Projesi")
+st.caption("RetailFlow Pro v2.0 | Melisa | UpSchool AI & İş Analitiği Projesi")
