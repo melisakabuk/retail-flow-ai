@@ -97,7 +97,13 @@ with col_left:
         },
         title = {'text': "Mağaza Verimlilik Endeksi", 'font': {'size': 20, 'color': 'black'}}
     ))
-    fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=400)
+    # Grafik Başlığını Beyaz, Arka Planı Şeffaf Yapma
+    fig.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)', 
+        plot_bgcolor='rgba(0,0,0,0)', 
+        height=400,
+        font={'color': "white"} # Grafik içindeki tüm yazıların rengini beyaz yapar
+    )
     st.plotly_chart(fig, use_container_width=True)
 
 with col_right:
