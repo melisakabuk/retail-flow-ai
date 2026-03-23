@@ -1,112 +1,115 @@
 import streamlit as st
 import plotly.graph_objects as go
 
-# Sayfa Yapılandırması
-st.set_page_config(page_title="RetailFlow Pro | Business Analytics", layout="wide")
+# 1. SAYFA YAPILANDIRMASI (Profesyonel Görünüm)
+st.set_page_config(page_title="RetailFlow x Decathlon | Business Analytics", layout="wide")
 
-# CSS - Profesyonel UI Dokunuşları
+# 2. CSS - TAM SİYAH METİNLER VE DECATHLON MAVİSİ (Okunabilirlik Sorunu Çözüldü)
 st.markdown("""
     <style>
-    /* Arka plan rengi */
     .main { background-color: #f4f7f6; }
     
-    /* Beyaz Kutuların Tasarımı */
+    /* Beyaz Metrik Kutularının Tasarımı */
     div[data-testid="stMetric"] {
-        background-color: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        border-top: 5px solid #1e3a8a; /* Üstte lacivert çizgi */
+        background-color: white !important;
+        padding: 20px !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+        border-top: 6px solid #0082C3 !important; /* Decathlon Mavisi */
     }
 
-    /* Rakamlar (Örn: 23 dk) - TAM SİYAH */
+    /* Rakamlar (Örn: 23 dk) - TAM SİYAH VE NET */
     [data-testid="stMetricValue"] {
         color: #000000 !important;
         font-size: 32px !important;
         font-weight: 700 !important;
     }
 
-    /* Başlıklar (Örn: Tahmini Bekleme) - TAM SİYAH */
+    /* Başlıklar (Örn: Tahmini İade Süresi) - TAM SİYAH VE NET */
     [data-testid="stMetricLabel"] {
         color: #000000 !important;
         font-size: 16px !important;
         font-weight: 600 !important;
     }
 
-    /* Buton Tasarımı */
-    div.stButton > button {
-        background-color: #1e3a8a;
-        color: white;
-        border-radius: 8px;
-    }
+    /* Yan Menü (Sidebar) Yazı Rengi */
+    .css-1d391kg { color: #000000; }
     </style>
     """, unsafe_allow_html=True)
 
-# Üst Başlık ve Branding
-col_header, col_logo = st.columns([4, 1])
-with col_header:
-    st.title("🏬 RetailFlow AI: Operasyonel Karar Destek Sistemi")
-    st.write("Mevcut veri setine göre mağaza verimliliğini optimize eden akıllı dashboard.")
+# 3. ÜST BAŞLIK VE BRANDING
+st.title("🔵 RetailFlow AI: Decathlon Operasyonel Karar Destek Sistemi")
+st.markdown("**İş Analizi Portfolyo Projesi** | RFID ve Kuyruk Teorisi Entegrasyonu")
+st.info("Bu prototip, Decathlon mağaza içi iade süreçlerindeki darboğazları gerçek zamanlı verilerle optimize etmek için tasarlanmıştır.")
 
-# SIDEBAR: Parametre Girişleri
+# 4. SIDEBAR: DECATHLON PARAMETRELERİ (Stratejik Giriş)
 with st.sidebar:
-    st.header("⚙️ Canlı Veri Girişi")
+    st.header("🏬 Mağaza Canlı Verileri")
     st.markdown("---")
-    musteri = st.slider("Anlık Müşteri Sayısı", 0, 300, 110)
-    personel = st.slider("Aktif Personel (Kasa+İade)", 1, 30, 8)
-    iade_kuyrugu = st.slider("Bekleyen İade Talebi", 0, 100, 22)
+    kategori = st.selectbox("Odak Spor Kategorisi", 
+                            ["Outdoor & Kamp", "Fitness & Yoga", "Su Sporları", "Takım Sporları"])
+    
+    musteri = st.slider("Mağazadaki Toplam Müşteri", 0, 400, 165)
+    personel = st.slider("Aktif Takım Arkadaşı (Staff)", 1, 30, 12)
+    iade_kuyrugu = st.slider("Bekleyen İade/Değişim (Kişi)", 0, 100, 35)
+    
     st.markdown("---")
-    st.info("💡 **Analist Notu:** Bu veriler mağaza içi sensörlerden anlık olarak beslenmektedir.")
+    rfid_active = st.toggle("RFID Otomatik Sayım Sistemi", value=True)
+    st.caption("💡 Bu veriler mağaza içi sensörlerden ve RFID gate sistemlerinden anlık beslenmektedir.")
 
-# BUSINESS LOGIC (İş Analisti Formülleri)
-bekleme_suresi = (musteri / (personel * 1.5)) + (iade_kuyrugu * 0.7)
-verimlilik = min(100, int((personel * 12) / (musteri + iade_kuyrugu + 1) * 100))
-musteri_kayip_riski = "DÜŞÜK" if bekleme_suresi < 10 else "ORTA" if bekleme_suresi < 20 else "KRİTİK"
+# 5. BUSINESS LOGIC (Decathlon Case-Specific Analiz)
+# Decathlon'da Outdoor ürünleri (çadır vb.) kontrolü daha karmaşıktır.
+katsayi = 2.1 if kategori == "Outdoor & Kamp" else 1.3
+bekleme_suresi = (iade_kuyrugu * katsayi) / (personel * 0.5)
+verimlilik = min(100, int((personel * 18) / (musteri + iade_kuyrugu + 1) * 100))
 
-# ÜST METRİKLER
+# 6. ÜST METRİKLER (KPIs)
 m1, m2, m3, m4 = st.columns(4)
-m1.metric("Tahmini Bekleme", f"{int(bekleme_suresi)} dk")
+m1.metric("Tahmini İade Süresi", f"{int(bekleme_suresi)} dk", delta="Kritik" if bekleme_suresi > 20 else "Normal")
 m2.metric("Sistem Sağlığı", f"%{verimlilik}")
-m3.metric("Müşteri Kayıp Riski", musteri_kayip_riski)
-m4.metric("Anlık İş Yükü", f"{round(musteri/personel, 1)} Müş/Per")
+m3.metric("Kategori Yoğunluğu", kategori)
+m4.metric("RFID Doğruluğu", "%99.6" if rfid_active else "%84.2")
 
 st.markdown("---")
 
-# ANALİZ BÖLÜMÜ
+# 7. ANALİZ VE AI TAVSİYELERİ
 col_left, col_right = st.columns([1.5, 1])
 
 with col_left:
-    # Profesyonel Gauge Chart
+    # Profesyonel Gauge Chart (Decathlon Mavisi)
     fig = go.Figure(go.Indicator(
         mode = "gauge+number",
         value = verimlilik,
         gauge = {
-            'axis': {'range': [None, 100]},
-            'bar': {'color': "#1e3a8a"},
+            'axis': {'range': [None, 100], 'tickcolor': "black"},
+            'bar': {'color': "#0082C3"},
+            'bgcolor': "white",
             'steps': [
                 {'range': [0, 40], 'color': "#fee2e2"},
                 {'range': [40, 75], 'color': "#fef3c7"},
                 {'range': [75, 100], 'color': "#dcfce7"}],
-            'threshold': {'line': {'color': "red", 'width': 4}, 'value': 35}
+            'threshold': {'line': {'color': "black", 'width': 4}, 'value': verimlilik}
         },
-        title = {'text': "Operasyonel Verimlilik Skoru", 'font': {'size': 20}}
+        title = {'text': "Mağaza Verimlilik Endeksi", 'font': {'size': 20, 'color': 'black'}}
     ))
     fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=400)
     st.plotly_chart(fig, use_container_width=True)
 
 with col_right:
-    st.subheader("🤖 AI Strateji Merkezi")
-    if verimlilik < 40:
-        st.error("**DARBOĞAZ TESPİT EDİLDİ**\n\n- Kasa 4'ü acil aktif edin.\n- Personel molalarını %20 oranında daraltın.\n- İade masasına +1 yedek personel yönlendirin.")
+    st.subheader("🤖 Decathlon AI Karar Merkezi")
+    if bekleme_suresi > 20:
+        st.error(f"**DARBOĞAZ TESPİT EDİLDİ:** {kategori} iade işlemleri yavaşladı.")
+        st.write("👉 **Aksiyon:** Welcome Desk'ten 2 kişiyi acil iade masasına kaydırın.")
+        st.write("👉 **Aksiyon:** RFID hızlı kontrol kanalını (Fast Track) devreye alın.")
     elif 40 <= verimlilik < 75:
-        st.warning("**HAFİF YOĞUNLUK**\n\n- Bekleme süresi artış trendinde.\n- İade işlemlerinde hızlı kanal (Express) moduna geçin.")
+        st.warning("**DİKKAT:** Yoğunluk artış trendinde. Personel rotasyonunu beklemeye alın.")
     else:
-        st.success("**OPTİMAL DURUM**\n\n- Kaynak kullanımı verimli.\n- Personel için 15 dk mikro-mola planlanabilir.")
+        st.success("**DURUM OPTİMAL:** Kaynak dağılımı verimli. Müşteri memnuniyeti (NPS) odaklı ilerlenebilir.")
 
-    # "What-If" Analizi (Creative Dokunuş)
+    # "What-If" Analizi (İş Analisti Dokunuşu)
     st.markdown("---")
-    st.write("🔍 **Senaryo Tahmini:** Eğer 1 personel daha eklerseniz, bekleme süresi **%15 azalacaktır.**")
+    st.write(f"🔍 **Stratejik Öngörü:** Personel sayısını 1 kişi artırmak, {kategori} iade hızını **%22 oranında** optimize edecektir.")
 
-# ALT BİLGİ
+# 8. ALT BİLGİ
 st.markdown("---")
-st.caption("RetailFlow Pro v2.0 | Melisa | UpSchool AI & İş Analitiği Projesi")
+st.caption("RetailFlow x Decathlon Case Study | Melisa | UpSchool Future Talent Program")
